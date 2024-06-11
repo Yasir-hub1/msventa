@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nota de Venta</title>
+    <style>
+        .text-center { text-align: center; }
+        .texto-rojo { color: red; }
+        .texto-info { color: blue; }
+        .mtv-0 { margin-top: 0; margin-bottom: 0; }
+        .border-head { border: solid 1px; }
+        .border-lr { border-left: solid 1px; border-right: solid 1px; }
+        .border-tb { border-top: solid 1px; border-bottom: solid 1px; }
+    </style>
+</head>
+<body>
+    <div id="nota_venta">
+        <header style="margin-top: 0px; margin-bottom: 5px">
+            <table style="width: 100%; margin-bottom: 25px">
+                <tbody>
+                    <tr>
+                        <td style="width: 30%">
+                            {% comment %} <!-- <img class="imagen" style="width: 5.6cm" src="{{ public_path('images/wcorp.png') }}"> --> {% endcomment %}
+                        </td>
+                        <td style="width: 40%; vertical-align: bottom;">
+                            <div>
+                                <h1 class="texto-rojo text-center" style="margin-bottom: 0px">ORDEN DE PEDIDO</h1>
+                                <h1 class="texto-rojo text-center" style="margin-top: 0px">Nº {{ nota_venta.nro_nota|default_if_none:"000000" }}</h1>
+                            </div>
+                        </td>
+                        <td class="texto-info" style="width: 30%;">
+                            <p class="text-center mtv-0" style="font-weight: bold">
+                                <small>BARRACA Y CARPINTERIA MARIYOLY</small>
+                            </p>
+                           
+                            <p class="text-center mtv-0">
+                                2 DE AGOSTO
+                            </p>
+                            <p class="text-center mtv-0" style="font-weight: bold">
+                                Tel: 75633655
+                            </p>
+                            <p class="text-center mtv-0" style="font-weight: bold">
+                                Santa Cruz - Bolivia
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="border: solid 1px; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; width: 10%">Lugar y fecha:</td>
+                        <td style="font-weight: bold">Santa Cruz de la Sierra, {{ venta.fecha }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Señor(es):</td>
+                        <td style="font-weight: bold">{{ cliente.name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Telefono:</td>
+                        <td style="font-weight: bold">{{ cliente.phone }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="border: solid 1px; width: 100%; margin-top: 10px; border-collapse: collapse;">
+                <thead style="border: solid 1px">
+                    <tr style="text-align: center">
+                        <th class="border-head" style="width: 10%">CANTIDAD</th>
+                        <th class="border-head" style="width: 65%">CONCEPTO</th>
+                        <th class="border-head" style="width: 15%">P.UNITARIO</th>
+                        <th class="border-head" style="width: 10%">SUBTOTAL</th>
+                    </tr>
+                </thead>
+                <tbody style="border: solid 1px;">
+                    {% for item in datos %}
+                        {% if forloop.counter0 < 65 %}
+                            <tr>
+                                <td class="border-lr text-center">{{ item.cantidad }}</td>
+                                <td class="border-lr text-center">{{ item.especie }} {{ item.largo }} x {{ item.ancho }} x {{ item.espesor }}</td>
+                                <td class="border-lr text-center">{{ item.precio_unitario }}</td>
+                                <td class="border-lr text-center">{{ item.subtotal }}</td>
+                            </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td class="border-lr" style="height: 10px;"></td>
+                            <td class="border-lr"></td>
+                            <td class="border-lr"></td>
+                            <td class="border-lr"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        
+                        <th class="border-head border-tb" colspan="2" style="width: 65%; text-align: left"></th>
+                        <th class="border-head border-tb" style="width: 15%; text-align: right">Descuento Bs. :</th>
+                        <th class="border-head border-tb" style="width: 10%">
+                            {% if venta %}
+                                {{ venta.descuento }}
+                            {% else %}
+                                ----------
+                            {% endif %}
+                        </th>
+                    </tr>
+                    
+                    <tr>
+                        <th class="" colspan="2" style="width: 65%; text-align: left"></th>
+                        <th class="border-head border-tb" style="width: 15%; text-align: right">A CUENTA Bs. :</th>
+                        <th class="border-head border-tb" style="width: 10%">
+                            {% if pago %}
+                                {{ pago.monto_pagado }}
+                            {% else %}
+                                ----------
+                            {% endif %}
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th class="" colspan="2" style="width: 65%; text-align: left"></th>
+                        <th class="border-head border-tb" style="width: 15%; text-align: right">SALDO Bs.:</th>
+                        <th class="border-head border-tb" style="width: 10%">
+                            {% if pago %}
+                                {{ pago.monto_saldo }}
+                            {% else %}
+                                ----------
+                            {% endif %}
+                        </th>
+                    </tr>
+
+                    <tr>
+                        <th class="" colspan="2" style="width: 65%; text-align: left"></th>
+                        <th class="border-head border-tb" style="width: 15%; text-align: right">TOTAL Bs. :</th>
+                        <th class="border-head border-tb" style="width: 10%">{{ venta.total }}</th>
+                    </tr>
+                    
+                </thead>
+            </table>
+        </header>
+    </div>
+
+    <div id="orden_trabajo">
+        <header style="margin-top: 0px; margin-bottom: 5px">
+            <table style="width: 100%; margin-bottom: 25px">
+                <tbody>
+                    <tr>
+                        <td style="width: 30%">
+                            {% comment %} <!-- <img class="imagen" style="width: 5.6cm" src="{{ public_path('images/campodac.png') }}"> --> {% endcomment %}
+                        </td>
+                        <td style="width: 40%; vertical-align: bottom;">
+                            <div>
+                                <h1 class="texto-rojo text-center" style="margin-bottom: 0px">ORDEN DE TRABAJO</h1>
+                                <h1 class="texto-rojo text-center" style="margin-top: 0px">Nº {{ orden_trabajo.nro_despacho|default_if_none:"000000" }}</h1>
+                            </div>
+                        </td>
+                        <td class="texto-info" style="width: 30%;">
+                            <p class="text-center mtv-0" style="font-weight: bold">
+                                <small>BARRACA Y CARPINTERIA MARIYOLY</small>
+                            </p>
+                           
+                            <p class="text-center mtv-0">
+                                2 DE AGOSTO
+                            </p>
+                            <p class="text-center mtv-0" style="font-weight: bold">
+                                Tel: 75633655
+                            </p>
+                            <p class="text-center mtv-0" style="font-weight: bold">
+                                Santa Cruz - Bolivia
+                            </p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="border: solid 1px; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; width: 10%">Lugar y fecha:</td>
+                        <td style="font-weight: bold">Santa Cruz de la Sierra, {{ venta.fecha }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Señor(es):</td>
+                        <td style="font-weight: bold">{{ cliente.name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Telefono:</td>
+                        <td style="font-weight: bold">{{ cliente.phone }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="border: solid 1px; width: 100%; margin-top: 10px; border-collapse: collapse;">
+                <thead style="border: solid 1px">
+                    <tr style="text-align: center">
+                        <th class="border-head" style="width: 10%">CANTIDAD</th>
+                        <th class="border-head" style="width: 65%">CONCEPTO</th>
+                        <th class="border-head" style="width: 15%">OBSERVACION</th>
+                    </tr>
+                </thead>
+                <tbody style="border: solid 1px;">
+                    {% for item in datos %}
+                        {% if forloop.counter0 < 60 %}
+                            <tr>
+                                <td class="border-lr text-center">{{ item.cantidad }}</td>
+                                <td class="border-lr text-center">{{ item.especie }} {{ item.largo }} x {{ item.ancho }} x {{ item.espesor }}</td>
+                                <td class="border-lr text-center">{{ item.detalle }}</td>
+                            </tr>
+                        {% endif %}
+                    {% empty %}
+                        <tr>
+                            <td class="border-lr" style="height: 10px;"></td>
+                            <td class="border-lr"></td>
+                            <td class="border-lr"></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </header>
+    </div>
+</body>
+</html>

@@ -1,0 +1,151 @@
+<!-- templates/reports/Barraca/print_pago.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recibo de Pago</title>
+    <style>
+        /* Estilos CSS para el PDF */
+        .text-center {
+            text-align: center;
+        }
+        .border-head {
+            border: solid 1px #000;
+            padding: 5px;
+        }
+        .border-lr {
+            border-left: solid 1px #000;
+            border-right: solid 1px #000;
+        }
+        .border-tb {
+            border-top: solid 1px #000;
+            border-bottom: solid 1px #000;
+        }
+        .mtv-0 {
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        .texto-rojo {
+            color: red;
+        }
+        .texto-info {
+            font-weight: bold;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+        th, td {
+            padding: 5px;
+            text-align: center;
+        }
+        .imagen {
+            width: 5.6cm;
+        }
+    </style>
+</head>
+<body>
+    <div id="nota_venta">
+        <header style="margin-top: 0px; margin-bottom: 5px">
+            <table style="width: 100%; margin-bottom: 25px">
+                <tbody>
+                <tr>
+                    <td style="width: 30%">
+                       
+                    </td>
+                    <td style="width: 40%; vertical-align: bottom;">
+                        <div>
+                            <h1 class="texto-rojo text-center" style="margin-bottom: 0px">RECIBO DE PAGO</h1>
+                            <h1 class="texto-rojo text-center" style="margin-top: 0px">Nº {{ pago.nro_recibo|stringformat:"06d" }}</h1>
+                        </div>
+                    </td>
+                    <td class="texto-info" style="width: 30%;">
+                        <p class="text-center mtv-0" style="font-weight: bold">
+                            <small>BARRACA Y CARPINTERIA MARIYOLY</small>
+                        </p>
+                       
+                        <p class="text-center mtv-0">
+                            2 DE AGOSTO
+                        </p>
+                        <p class="text-center mtv-0" style="font-weight: bold">
+                            Tel: 75633655
+                        </p>
+                        <p class="text-center mtv-0" style="font-weight: bold">
+                            Santa Cruz - Bolivia
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <table style="border: solid 1px; width: 100%;">
+                <tbody>
+                    <tr>
+                        <td style="font-weight: bold; width: 10%;">Lugar y fecha:</td>
+                        <td style="font-weight: bold">Santa Cruz de la Sierra, {{ current_date.day }} de {{ current_date|date:"F" }} del {{ current_date.year }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Señor(es):</td>
+                        <td style="font-weight: bold">{{ customer.name }}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Teléfono:</td>
+                        <td style="font-weight: bold">{{ customer.phone1 }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table style="border: solid 1px; width: 100%; margin-top: 10px; border-collapse: collapse;">
+                <thead style="border: solid 1px">
+                    <tr style="text-align: center">
+                        <th class="border-head" style="width: 20%">FECHA PAGO</th>
+                        <th class="border-head" style="width: 20%">MÉTODO PAGO</th>
+                        <th class="border-head" style="width: 20%">MONTO TOTAL</th>
+                        <th class="border-head" style="width: 20%">MONTO PAGADO</th>
+                        <th class="border-head" style="width: 20%">MONTO SALDO</th>
+                        <th class="border-head" style="width: 65%">OBSERVACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody style="border: solid 1px;">
+                    <tr>
+                        <td class="border-lr text-center">{{ pago.fecha_pago }}</td>
+                        <td class="border-lr text-center">
+                            {% if pago.tipo_pago == 1 %}
+                                EFECTIVO
+                            {% elif pago.tipo_pago == 2 %}
+                                GIFT CARD - {{ pago.monto_gift_card }}
+                            {% elif pago.tipo_pago == 3 %}
+                                TARJETA CRÉDITO - {{ pago.numero_tarjeta }}
+                            {% else %}
+                                OTRO
+                            {% endif %}
+                        </td>
+                        <td class="border-lr text-center">{{ pago.monto_total|floatformat:2 }}</td>
+                        <td class="border-lr text-center">{{ pago.monto_pagado|floatformat:2 }}</td>
+                        <td class="border-lr text-center">{{ pago.monto_saldo|floatformat:2 }}</td>
+                        <td class="border-lr text-center">{{ pago.observacion }}</td>
+                    </tr>
+                    {% for i in rango %}
+                    <tr>
+                        <td class="border-lr" style="height: 10px;"></td>
+                        <td class="border-lr"></td>
+                        <td class="border-lr"></td>
+                        <td class="border-lr"></td>
+                        <td class="border-lr"></td>
+                        <td class="border-lr"></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <table style="width: 100%; margin-top: 10px; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th class="border-head border-tb" colspan="2" style="width: 60%; text-align: left"></th>
+                        <th class="border-head border-tb" style="width: 20%; text-align: right">TOTAL PAGADO Bs. :</th>
+                        <th class="border-head border-tb" style="width: 10%">{{ pago.monto_pagado|floatformat:2 }}</th>
+                    </tr>
+                </thead>
+            </table>
+        </header>
+    </div>
+</body>
+</html>

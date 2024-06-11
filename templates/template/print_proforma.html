@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<title>PROFORMA</title>
+		<style>
+			.text-center {
+				text-align: center;
+			}
+			.texto-rojo {
+				color: red;
+			}
+			.texto-info {
+				color: blue;
+			}
+			.mtv-0 {
+				margin-top: 0;
+				margin-bottom: 0;
+			}
+			.border-head {
+				border: solid 1px;
+			}
+			.border-lr {
+				border-left: solid 1px;
+				border-right: solid 1px;
+			}
+			.border-tb {
+				border-top: solid 1px;
+				border-bottom: solid 1px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="nota_venta">
+			<header style="margin-top: 0px; margin-bottom: 5px">
+				<table style="width: 100%; margin-bottom: 25px">
+					<tbody>
+						<tr>
+							<td style="width: 30%"></td>
+							<td style="width: 40%; vertical-align: bottom">
+								<div style="">
+									<h1 class="texto-rojo text-center" style="margin-bottom: 0px">
+										PROFORMA
+									</h1>
+									<h1 class="texto-rojo text-center" style="margin-top: 0px">
+										Nº {{ proforma.nro_proforma }}
+									</h1>
+								</div>
+							</td>
+							<td class="texto-info" style="width: 30%">
+								<p class="text-center mtv-0" style="font-weight: bold">
+									<small>BARRACA Y CARPINTERIA MARIYOLY</small>
+								</p>
+
+								<p class="text-center mtv-0">2 DE AGOSTO</p>
+								<p class="text-center mtv-0" style="font-weight: bold">
+									Tel: 75633655
+								</p>
+								<p class="text-center mtv-0" style="font-weight: bold">
+									Santa Cruz - Bolivia
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<table style="border: solid 1px; width: 100%">
+					<tbody>
+						<tr>
+							<td style="font-weight: bold; width: 10%">Lugar y fecha:</td>
+							<td style="font-weight: bold">
+								Santa Cruz de la Sierra, {{fecha}}
+							</td>
+						</tr>
+						<tr>
+							<td style="font-weight: bold">Señor(es):</td>
+							<td style="font-weight: bold">{{ cliente.name }}</td>
+						</tr>
+						<tr>
+							<td style="font-weight: bold">Telefono:</td>
+							<td style="font-weight: bold">{{ cliente.phone }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<table
+					style="
+						border: solid 1px;
+						width: 100%;
+						margin-top: 10px;
+						border-collapse: collapse;
+					">
+					<thead style="border: solid 1px">
+						<tr style="text-align: center">
+							<th class="border-head" style="width: 10%">CANTIDAD</th>
+							<th class="border-head" style="width: 10%">ESPESOR</th>
+							<th class="border-head" style="width: 10%">ANCHO</th>
+							<th class="border-head" style="width: 10%">LARGO</th>
+							<th class="border-head" style="width: 65%">OBSERVACION</th>
+							<th class="border-head" style="width: 15%">P.UNITARIO</th>
+							<th class="border-head" style="width: 10%">SUBTOTAL</th>
+						</tr>
+					</thead>
+					<tbody style="border: solid 1px">
+						{% for item in datos %}
+						<tr>
+							<td class="border-lr text-center">{{ item.cantidad }}</td>
+							<td class="border-lr text-center">{{ item.largo }}</td>
+							<td class="border-lr text-center">{{ item.ancho }}</td>
+							<td class="border-lr text-center">{{ item.espesor }}</td>
+							<td class="border-lr text-center">
+								{{ item.especie }} - {{ item.detalles }}
+							</td>
+							<td class="border-lr text-center">{{ item.precio_unitario }}</td>
+							<td class="border-lr text-center">{{ item.subtotal }}</td>
+						</tr>
+						{% endfor %} {% for i in rango %}
+						<tr>
+							<td class="border-lr" style="height: 10px"></td>
+							<td class="border-lr"></td>
+							<td class="border-lr"></td>
+							<td class="border-lr"></td>
+							<td class="border-lr"></td>
+							<td class="border-lr"></td>
+							<td class="border-lr"></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<table style="width: 100%; margin-top: 10px; border-collapse: collapse">
+					<thead>
+						<tr>
+							<th
+								class="border-head border-tb"
+								colspan="2"
+								style="width: 65%; text-align: left"></th>
+							<th
+								class="border-head border-tb"
+								style="width: 15%; text-align: right">
+								DESCUENTO Bs. :
+							</th>
+							{% if venta %}
+							<th class="border-head border-tb" style="width: 10%">
+								{% if venta.tipo_venta == "PROFORMA" %} {{ venta.descuento }} {% endif %}
+							</th>
+
+							{% endif %}
+						</tr>
+						<tr>
+							<th
+								class="border-head border-tb"
+								colspan="2"
+								style="width: 65%; text-align: left"></th>
+
+							<th
+								class="border-head border-tb"
+								style="width: 15%; text-align: right">
+								TOTAL Bs. :
+							</th>
+							<th class="border-head border-tb" style="width: 10%">
+								{{ venta.total }}
+							</th>
+						</tr>
+					</thead>
+				</table>
+				<div>
+					{% if proforma %}
+					<h4>OBSERVACIONES</h4>
+					<p><strong>1.- Puesto en obra:</strong> {{ proforma.puesto_obra }}</p>
+					<p><strong>2.- Tipo de cambio:</strong> {{ proforma.tipo_cambio }}</p>
+					<p>
+						<strong>3.- Condiciones de entrega:</strong> {{ proforma.condiciones_entrega }}
+					</p>
+					<p>
+						<strong>4.- Tiempo de entrega:</strong> {{ proforma.tiempo_entrega }}
+					</p>
+					<p>
+						<strong>5.- Forma de entrega:</strong> {{ proforma.forma_entrega }}
+					</p>
+					<p><strong>6.- Forma de pago:</strong> {{ proforma.forma_pago }}</p>
+					{% endif %}
+				</div>
+			</header>
+		</div>
+	</body>
+</html>
